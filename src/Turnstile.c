@@ -1,7 +1,10 @@
 #include "Turnstile.h"
-static int currentState;
 
-void Turnstile_Create(void) {
+static int currentState;
+static TurnstileContextInterface * context;
+
+void Turnstile_Create( TurnstileContextInterface * turnstileContext ) {
+  context = turnstileContext;
 }
 
 void Turnstile_Destroy(void){
