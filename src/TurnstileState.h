@@ -9,5 +9,7 @@ typedef struct TurnstileState TurnstileState;
 struct TurnstileState {
   event_func_t Coin;
   event_func_t Push;
+  event_func_t Full;
+  event_func_t Empty;
 };
 #endif // TurnstileState_H
