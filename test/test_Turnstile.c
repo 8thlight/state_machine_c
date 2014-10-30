@@ -34,6 +34,7 @@ TurnstileContextInterface testContext = {
 void setUp(void)
 {
   Turnstile_Create(&testContext);
+  resetMocks();
 }
 
 void tearDown( void )
@@ -77,3 +78,19 @@ void test_security_is_notified( void )
   Turnstile_Push();
   TEST_ASSERT_TRUE( securityNotified );
 }
+
+// void test_out_of_order_coin( void )
+// {
+//   Turnstile_Full();
+//   Turnstile_Coin();
+//   TEST_ASSERT_FALSE( lockReleased );
+//   TEST_ASSERT_TRUE( coinRefunded );
+// }
+//
+// void test_out_of_order_push( void )
+// {
+//   Turnstile_Full();
+//   Turnstile_Push();
+//   TEST_ASSERT_FALSE( lockReleased );
+//   TEST_ASSERT_TRUE( securityNotified );
+// }
