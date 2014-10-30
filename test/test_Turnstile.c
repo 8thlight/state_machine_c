@@ -1,5 +1,8 @@
 #include "unity.h"
 #include "Turnstile.h"
+#include "TurnstileState.h"
+#include "TurnstileStateLocked.h"
+#include "TurnstileStateUnlocked.h"
 
 
 int lockEngaged = 0;
