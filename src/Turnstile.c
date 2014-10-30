@@ -1,11 +1,9 @@
 #include "Turnstile.h"
+#include "TurnstileContext.h"
 
-typedef enum TURNSTILE_STATES { LOCKED, UNLOCKED } TURNSTILE_STATES;
-static TURNSTILE_STATES currentState;
-static TurnstileContextInterface * context;
+TURNSTILE_STATES currentState;
 
-void Turnstile_Create( TurnstileContextInterface * turnstileContext ) {
-  context = turnstileContext;
+void Turnstile_Create() {
   currentState = LOCKED;
 }
 
@@ -15,11 +13,11 @@ void Turnstile_Destroy(void){
 void Turnstile_Coin(void){
   switch (currentState) {
     case LOCKED:
-      context->ReleaseLock();
+      TurnstileContext_ReleaseLock();
       currentState = UNLOCKED;
       break;
     case UNLOCKED:
-      context->RefundCoin();
+      TurnstileContext_RefundCoin();
       break;
   }
 }
@@ -27,10 +25,10 @@ void Turnstile_Coin(void){
 void Turnstile_Push(void){
   switch (currentState) {
     case LOCKED:
-      context->NotifySecurity();
+      TurnstileContext_NotifySecurity();
       break;
     case UNLOCKED:
-      context->EngageLock();
+      TurnstileContext_EngageLock();
       currentState = LOCKED;
       break;
   }

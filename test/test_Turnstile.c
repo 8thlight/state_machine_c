@@ -1,36 +1,11 @@
 #include "unity.h"
 #include "Turnstile.h"
+#include "TurnstileContext.h"
 
-
-int lockEngaged = 0;
-void TurnstyleTest_EngageLock(void) { lockEngaged = 1; }
-
-int lockReleased = 0;
-void TurnstyleTest_ReleaseLock(void) { lockReleased = 1; }
-
-int coinRefunded = 0;
-void TurnstyleTest_RefundCoin(void) { coinRefunded = 1; }
-
-int securityNotified = 0;
-void TurnstyleTest_NotifySecurity(void) { securityNotified = 1; }
-
-void resetMocks() {
-  lockReleased = 0;
-  lockEngaged = 0;
-  coinRefunded = 0;
-  securityNotified = 0;
-}
-
-TurnstileContextInterface testContext = {
-  &TurnstyleTest_EngageLock,
-  &TurnstyleTest_ReleaseLock,
-  &TurnstyleTest_RefundCoin,
-  &TurnstyleTest_NotifySecurity
-};
 
 void setUp(void)
 {
-  Turnstile_Create(&testContext);
+  Turnstile_Create();
 }
 
 void tearDown( void )
@@ -41,36 +16,33 @@ void tearDown( void )
 void test_coin_releases_lock( void )
 {
   Turnstile_Coin();
-  TEST_ASSERT_TRUE(lockReleased);
+  TEST_ASSERT_EQUAL(currentState, UNLOCKED);
 }
 
 void test_second_coin_is_refunded( void )
 {
   Turnstile_Coin();
-  lockReleased = 0;
   Turnstile_Coin();
-  TEST_ASSERT_TRUE( coinRefunded );
-  TEST_ASSERT_FALSE( lockReleased );
+  TEST_ASSERT_EQUAL(currentState, UNLOCKED);
 }
 
 void test_pass_engages_lock( void )
 {
   Turnstile_Coin();
   Turnstile_Push();
-  TEST_ASSERT_TRUE( lockEngaged );
+  TEST_ASSERT_EQUAL(currentState, LOCKED);
 }
 
 void test_multiple_locks_released( void )
 {
   Turnstile_Coin();
   Turnstile_Push();
-  resetMocks();
   Turnstile_Coin();
-  TEST_ASSERT_TRUE(lockReleased);
+  TEST_ASSERT_EQUAL(currentState, UNLOCKED);
 }
 
 void test_security_is_notified( void )
 {
   Turnstile_Push();
-  TEST_ASSERT_TRUE( securityNotified );
+  TEST_ASSERT_EQUAL(currentState, LOCKED);
 }
