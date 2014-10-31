@@ -12,6 +12,8 @@ void Turnstile_Destroy( Turnstile* );
 /* Events */
 void Turnstile_Coin( Turnstile* );
 void Turnstile_Push( Turnstile* );
+void Turnstile_Full( Turnstile* );
+void Turnstile_Empty( Turnstile* );
 
 /* Actions */
 void Turnstile_EngageLock( Turnstile* );

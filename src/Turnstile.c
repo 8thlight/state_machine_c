@@ -25,6 +25,14 @@ void Turnstile_Push(Turnstile* this){
   turnstileContext_Push( &this->fsm );
 }
 
+void Turnstile_Full( Turnstile* this ) {
+  turnstileContext_Full( &this->fsm );
+}
+
+void Turnstile_Empty( Turnstile* this ) {
+  turnstileContext_Empty( &this->fsm );
+}
+
 void Turnstile_EngageLock( Turnstile* this )
 {
   this->actions->EngageLock();

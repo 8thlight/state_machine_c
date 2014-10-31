@@ -7,10 +7,19 @@ Locked
 {
          Coin Unlocked { ReleaseLock(); }
          Push nil      { NotifySecurity(); }
+         Full OutOfOrder { }
 }
 Unlocked
 {
          Push Locked   { EngageLock(); }
          Coin nil      { RefundCoin(); }
+         Empty Locked  { }
+}
+OutOfOrder
+{
+         Coin  nil      { RefundCoin(); }
+         Empty Locked   { }
+         Push  nil      { NotifySecurity(); }
+
 }
 %%

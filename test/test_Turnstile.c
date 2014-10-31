@@ -78,18 +78,18 @@ void test_security_is_notified( void )
   TEST_ASSERT_TRUE( securityNotified );
 }
 
-// void test_out_of_order_coin( void )
-// {
-//   Turnstile_Full( turnstile );
-//   Turnstile_Coin( turnstile );
-//   TEST_ASSERT_FALSE( lockReleased );
-//   TEST_ASSERT_TRUE( coinRefunded );
-// }
-//
-// void test_out_of_order_push( void )
-// {
-//   Turnstile_Full( turnstile );
-//   Turnstile_Push( turnstile );
-//   TEST_ASSERT_FALSE( lockReleased );
-//   TEST_ASSERT_TRUE( securityNotified );
-// }
+void test_out_of_order_coin( void )
+{
+  Turnstile_Full( turnstile );
+  Turnstile_Coin( turnstile );
+  TEST_ASSERT_FALSE( lockReleased );
+  TEST_ASSERT_TRUE( coinRefunded );
+}
+
+void test_out_of_order_push( void )
+{
+  Turnstile_Full( turnstile );
+  Turnstile_Push( turnstile );
+  TEST_ASSERT_FALSE( lockReleased );
+  TEST_ASSERT_TRUE( securityNotified );
+}
