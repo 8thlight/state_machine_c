@@ -1,32 +1,47 @@
 #include "Turnstile.h"
-#include "TurnstileStateLocked.h"
-#include "TurnstileStateUnlocked.h"
+#include <stdlib.h>
 
-static TurnstileState * currentState;
-static TurnstileContextInterface * context;
-TurnstileState* UNLOCKED;
-TurnstileState* LOCKED;
+struct Turnstile{
+  struct turnstileContext fsm;
+  TurnstileContextInterface * actions;
+};
 
-void Turnstile_Create( TurnstileContextInterface * turnstileContext )
+Turnstile* Turnstile_Create( TurnstileContextInterface * actions ) {
+  Turnstile * this = malloc( sizeof( Turnstile ) );
+  turnstileContext_Init(&this->fsm, this);
+  this->actions = actions;
+  return this;
+}
+
+void Turnstile_Destroy(Turnstile* this){
+  free( this );
+}
+
+void Turnstile_Coin(Turnstile* this){
+  turnstileContext_Coin( &this->fsm );
+}
+
+void Turnstile_Push(Turnstile* this){
+  turnstileContext_Push( &this->fsm );
+}
+
+void Turnstile_EngageLock( Turnstile* this )
 {
-  context = turnstileContext;
-  UNLOCKED = &TurnstileStateUnlocked;
-  LOCKED = &TurnstileStateLocked;
-  currentState = LOCKED;
+  this->actions->EngageLock();
 }
 
-void Turnstile_Destroy(void){
+void Turnstile_ReleaseLock( Turnstile* this )
+{
+  this->actions->ReleaseLock();
 }
 
-void Turnstile_SetState(TurnstileState * state) {
-  currentState = state;
+void Turnstile_RefundCoin( Turnstile* this )
+{
+  this->actions->RefundCoin();
 }
 
-void Turnstile_Coin(void){
-  currentState->Coin(context);
-}
-
-void Turnstile_Push(void){
-  currentState->Push(context);
+void Turnstile_NotifySecurity( Turnstile* this )
+{
+  this->actions->NotifySecurity();
 }
 

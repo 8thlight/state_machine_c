@@ -1,0 +1,16 @@
+%class Turnstile
+%start MainMap::Locked
+%header Turnstile.h
+%map MainMap
+%%
+Locked
+{
+         Coin Unlocked { ReleaseLock(); }
+         Push nil      { NotifySecurity(); }
+}
+Unlocked
+{
+         Push Locked   { EngageLock(); }
+         Coin nil      { RefundCoin(); }
+}
+%%

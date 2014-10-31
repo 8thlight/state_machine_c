@@ -1,16 +1,22 @@
 #ifndef Turnstile_H
 #define Turnstile_H
 
+#include "turnstile_sm.h"
 #include "TurnstileContextInterface.h"
-#include "TurnstileState.h"
 
-void Turnstile_Create( TurnstileContextInterface * );
-void Turnstile_Destroy( void );
-void Turnstile_Coin( void );
-void Turnstile_Push( void );
-void Turnstile_SetState(TurnstileState * state);
-extern TurnstileState * UNLOCKED;
-extern TurnstileState * LOCKED;
+typedef struct Turnstile Turnstile;
 
+Turnstile * Turnstile_Create( TurnstileContextInterface * actions );
+void Turnstile_Destroy( Turnstile* );
+
+/* Events */
+void Turnstile_Coin( Turnstile* );
+void Turnstile_Push( Turnstile* );
+
+/* Actions */
+void Turnstile_EngageLock( Turnstile* );
+void Turnstile_ReleaseLock( Turnstile* );
+void Turnstile_RefundCoin( Turnstile* );
+void Turnstile_NotifySecurity( Turnstile* );
 
 #endif // Turnstile_H

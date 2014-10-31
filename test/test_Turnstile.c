@@ -1,21 +1,18 @@
 #include "unity.h"
 #include "Turnstile.h"
-#include "TurnstileState.h"
-#include "TurnstileStateLocked.h"
-#include "TurnstileStateUnlocked.h"
-
+#include "turnstile_sm.h"
 
 int lockEngaged = 0;
-void TurnstyleTest_EngageLock(void) { lockEngaged = 1; }
+void TurnstileTest_EngageLock(void) { lockEngaged = 1; }
 
 int lockReleased = 0;
-void TurnstyleTest_ReleaseLock(void) { lockReleased = 1; }
+void TurnstileTest_ReleaseLock(void) { lockReleased = 1; }
 
 int coinRefunded = 0;
-void TurnstyleTest_RefundCoin(void) { coinRefunded = 1; }
+void TurnstileTest_RefundCoin(void) { coinRefunded = 1; }
 
 int securityNotified = 0;
-void TurnstyleTest_NotifySecurity(void) { securityNotified = 1; }
+void TurnstileTest_NotifySecurity(void) { securityNotified = 1; }
 
 void resetMocks() {
   lockReleased = 0;
@@ -25,72 +22,74 @@ void resetMocks() {
 }
 
 TurnstileContextInterface testContext = {
-  &TurnstyleTest_EngageLock,
-  &TurnstyleTest_ReleaseLock,
-  &TurnstyleTest_RefundCoin,
-  &TurnstyleTest_NotifySecurity
+  &TurnstileTest_EngageLock,
+  &TurnstileTest_ReleaseLock,
+  &TurnstileTest_RefundCoin,
+  &TurnstileTest_NotifySecurity
 };
+
+Turnstile * turnstile;
 
 void setUp(void)
 {
-  Turnstile_Create(&testContext);
+  turnstile = Turnstile_Create( &testContext );
   resetMocks();
 }
 
 void tearDown( void )
 {
-  Turnstile_Destroy();
+  Turnstile_Destroy( turnstile );
 }
 
 void test_coin_releases_lock( void )
 {
-  Turnstile_Coin();
+  Turnstile_Coin( turnstile );
   TEST_ASSERT_TRUE(lockReleased);
 }
 
 void test_second_coin_is_refunded( void )
 {
-  Turnstile_Coin();
+  Turnstile_Coin( turnstile );
   lockReleased = 0;
-  Turnstile_Coin();
+  Turnstile_Coin( turnstile );
   TEST_ASSERT_TRUE( coinRefunded );
   TEST_ASSERT_FALSE( lockReleased );
 }
 
 void test_pass_engages_lock( void )
 {
-  Turnstile_Coin();
-  Turnstile_Push();
+  Turnstile_Coin( turnstile );
+  Turnstile_Push( turnstile );
   TEST_ASSERT_TRUE( lockEngaged );
 }
 
 void test_multiple_locks_released( void )
 {
-  Turnstile_Coin();
-  Turnstile_Push();
+  Turnstile_Coin( turnstile );
+  Turnstile_Push( turnstile );
   resetMocks();
-  Turnstile_Coin();
+  Turnstile_Coin( turnstile );
   TEST_ASSERT_TRUE(lockReleased);
 }
 
 void test_security_is_notified( void )
 {
-  Turnstile_Push();
+  Turnstile_Push( turnstile );
   TEST_ASSERT_TRUE( securityNotified );
 }
 
 // void test_out_of_order_coin( void )
 // {
-//   Turnstile_Full();
-//   Turnstile_Coin();
+//   Turnstile_Full( turnstile );
+//   Turnstile_Coin( turnstile );
 //   TEST_ASSERT_FALSE( lockReleased );
 //   TEST_ASSERT_TRUE( coinRefunded );
 // }
 //
 // void test_out_of_order_push( void )
 // {
-//   Turnstile_Full();
-//   Turnstile_Push();
+//   Turnstile_Full( turnstile );
+//   Turnstile_Push( turnstile );
 //   TEST_ASSERT_FALSE( lockReleased );
 //   TEST_ASSERT_TRUE( securityNotified );
 // }

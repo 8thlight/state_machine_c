@@ -4,3 +4,8 @@ load "#{PROJECT_CEEDLING_ROOT}/lib/ceedling.rb"
 Ceedling.load_project
 
 task :default => %w[ test:all release ]
+task :smc do
+  Dir.chdir "src" do
+    system "java -jar ../lib/Smc.jar -c turnstile.sm"
+  end
+end
