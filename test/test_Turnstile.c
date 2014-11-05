@@ -93,10 +93,10 @@ void test_security_is_notified( void )
 //   TEST_ASSERT_FALSE( lockReleased );
 //   TEST_ASSERT_TRUE( securityNotified );
 // }
-//void test_empty( void )
-//{
-//  Turnstile_Full();
-//  Turnstile_Empty();
-//  Turnstile_Coin();
-//  TEST_ASSERT_TRUE(lockReleased);
-//}
+// void test_empty( void )
+// {
+//   Turnstile_Full( turnstile );
+//   Turnstile_Empty( turnstile );
+//   Turnstile_Coin( turnstile );
+//   TEST_ASSERT_TRUE(lockReleased);
+// }
