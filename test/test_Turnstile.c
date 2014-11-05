@@ -93,3 +93,11 @@ void test_out_of_order_push( void )
   TEST_ASSERT_FALSE( lockReleased );
   TEST_ASSERT_TRUE( securityNotified );
 }
+
+void test_empty( void )
+{
+  Turnstile_Full( turnstile );
+  Turnstile_Empty( turnstile );
+  Turnstile_Coin( turnstile );
+  TEST_ASSERT_TRUE(lockReleased);
+}
