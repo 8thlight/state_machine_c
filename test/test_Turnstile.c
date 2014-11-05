@@ -76,6 +76,7 @@ void test_security_is_notified( void )
   TEST_ASSERT_TRUE( securityNotified );
 }
 
+<<<<<<< HEAD
 // void test_out_of_order_coin( void )
 // {
 //   Turnstile_Full();
@@ -91,3 +92,10 @@ void test_security_is_notified( void )
 //   TEST_ASSERT_FALSE( lockReleased );
 //   TEST_ASSERT_TRUE( securityNotified );
 // }
+//void test_empty( void )
+//{
+//  Turnstile_Full();
+//  Turnstile_Empty();
+//  Turnstile_Coin();
+//  TEST_ASSERT_TRUE(lockReleased);
+//}
